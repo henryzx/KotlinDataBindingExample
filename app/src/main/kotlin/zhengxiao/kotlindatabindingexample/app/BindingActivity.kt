@@ -56,7 +56,7 @@ class BindingActivity : Activity() {
         setContentView(R.layout.activity_binding)
 
         // reset view state
-        progressBar.setVisibility(View.INVISIBLE)
+//        progressBar.hide()
         title.setText("Input Something to Search!")
         list.setLayoutManager(LinearLayoutManager(this))
         list.setAdapter(object : RecyclerView.Adapter<Holder>() {
@@ -89,8 +89,8 @@ class BindingActivity : Activity() {
         // nameObservable --> userObservable
         nameObservable.subscribe { s ->
             server.findUser(s)
-                    .doOnSubscribe { runOnUiThread { progressBar.setVisibility(View.VISIBLE) } }
-                    .doOnCompleted { runOnUiThread { progressBar.setVisibility(View.INVISIBLE) } }
+                    .doOnSubscribe { runOnUiThread { progressBar.show() } }
+                    .doOnCompleted { runOnUiThread { progressBar.hide() } }
                     .subscribe { jo: JSONObject ->
                         userObservable.onNext(jo)
                     }
@@ -109,8 +109,8 @@ class BindingActivity : Activity() {
         ViewObservable.clicks(addFriend).subscribe { e ->
             if (loadedUser != null) {
                 server.addFriend(loadedUser!!)
-                        .doOnSubscribe { runOnUiThread { progressBar.setVisibility(View.VISIBLE) } }
-                        .doOnCompleted { runOnUiThread { progressBar.setVisibility(View.INVISIBLE) } }
+                        .doOnSubscribe { runOnUiThread { progressBar.show() } }
+                        .doOnCompleted { runOnUiThread { progressBar.hide() } }
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { jo: JSONObject ->
                             if (server.isOK(jo)) {
@@ -153,7 +153,7 @@ class BindingActivity : Activity() {
                 val jo = JSONObject()
                 jo.put("name", s)
                 jo.put("age", (Math.random() * 10).toInt())
-                SystemClock.sleep(1000L)
+                SystemClock.sleep(2000L)
                 sub.onNext(jo)
                 sub.onCompleted()
             }.subscribeOn(Schedulers.io())
@@ -169,7 +169,7 @@ class BindingActivity : Activity() {
                     throw IllegalStateException("network on Main")
                 val jo = JSONObject()
                 jo.put("name", "JsonO${user.name}")
-                SystemClock.sleep(1000L)
+                SystemClock.sleep(2000L)
                 sub.onNext(jo)
                 sub.onCompleted()
             }.subscribeOn(Schedulers.io())

@@ -45,4 +45,5 @@ dependencies {
     compile 'io.reactivex:rxkotlin:0.22.12'
     compile 'io.reactivex:rxandroid:0.25.0'
     compile 'org.jetbrains.kotlin:kotlin-stdlib:+'
+    compile 'com.android.support:design:22.2.1'
 }
